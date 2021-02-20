@@ -1,0 +1,16 @@
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\bin\Debug\KiwoomTrader.exe.config
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\bin\Debug\KiwoomTrader.exe
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\bin\Debug\KiwoomTrader.pdb
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\bin\Debug\Interop.KHOpenAPILib.dll
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\bin\Debug\AxInterop.KHOpenAPILib.dll
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.csprojAssemblyReference.cache
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\Interop.KHOpenAPILib.dll
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\AxInterop.KHOpenAPILib.dll
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.csproj.ResolveComReference.cache
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.Form1.resources
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.Properties.Resources.resources
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.csproj.GenerateResource.cache
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.csproj.CoreCompileInputs.cache
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.exe
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.pdb
+C:\Users\SeongYun\source\repos\KiwoomTrader\KiwoomTrader\obj\Debug\KiwoomTrader.Api.resources
