@@ -52,6 +52,18 @@
     <Compile Include="Api.Designer.cs">
       <DependentUpon>Api.cs</DependentUpon>
     </Compile>
+    <Compile Include="Api_Events.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Api_Methods.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Api_Obj.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Api_Vars.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

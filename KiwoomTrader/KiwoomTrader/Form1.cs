@@ -23,7 +23,7 @@ namespace KiwoomTrader
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (api.LogIn() == KiwoomConst.Success)
+            if (api.로그인() == Api.Success)
             {
                 Console.WriteLine("로그인 창 띄우기 성공.");
             }
@@ -37,22 +37,24 @@ namespace KiwoomTrader
 
         private void btn_예수금_Click(object sender, EventArgs e)
         {
-            api.예수금_조회();
+            api.예수금상세현황요청();
+
         }
 
         private void btn_계좌평가잔고내역_Click(object sender, EventArgs e)
         {
-            api.계좌평가잔고내역요청_조회();
+            api.계좌평가잔고요청();
         }
 
         private void btn_미체결_Click(object sender, EventArgs e)
         {
-            api.미체결_조회();
+            api.미체결요청();
         }
 
-        private void btn_tmp_Click(object sender, EventArgs e)
+        private void btn_일봉_Click(object sender, EventArgs e)
         {
-            api.계산함수();
+            if(!tb_종목코드.Text.Equals(""))
+                api.주식일봉차트요청(tb_종목코드.Text);
         }
     }
 }
