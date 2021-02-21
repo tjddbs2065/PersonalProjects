@@ -13,3 +13,4 @@ git commit -m "msg"
 git push origin master <- 깃허브 기본 branch 이름이 main으로 바뀌어서 main으로 적어야 함
 
 git pull origin master - repository 변경사항 갱신
+git config --global init.defaultBranch main - branch 명 main으로 기본 설정

@@ -49,5 +49,10 @@ namespace KiwoomTrader
         {
             api.미체결_조회();
         }
+
+        private void btn_tmp_Click(object sender, EventArgs e)
+        {
+            api.계산함수();
+        }
     }
 }

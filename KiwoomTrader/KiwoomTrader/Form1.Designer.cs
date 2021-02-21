@@ -31,6 +31,7 @@
             this.btn_예수금 = new System.Windows.Forms.Button();
             this.btn_계좌평가잔고내역 = new System.Windows.Forms.Button();
             this.btn_미체결 = new System.Windows.Forms.Button();
+            this.btn_tmp = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_예수금
@@ -63,11 +64,22 @@
             this.btn_미체결.UseVisualStyleBackColor = true;
             this.btn_미체결.Click += new System.EventHandler(this.btn_미체결_Click);
             // 
+            // btn_tmp
+            // 
+            this.btn_tmp.Location = new System.Drawing.Point(210, 12);
+            this.btn_tmp.Name = "btn_tmp";
+            this.btn_tmp.Size = new System.Drawing.Size(75, 47);
+            this.btn_tmp.TabIndex = 3;
+            this.btn_tmp.Text = "btn_tmp";
+            this.btn_tmp.UseVisualStyleBackColor = true;
+            this.btn_tmp.Click += new System.EventHandler(this.btn_tmp_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btn_tmp);
             this.Controls.Add(this.btn_미체결);
             this.Controls.Add(this.btn_계좌평가잔고내역);
             this.Controls.Add(this.btn_예수금);
@@ -83,6 +95,7 @@
         private System.Windows.Forms.Button btn_예수금;
         private System.Windows.Forms.Button btn_계좌평가잔고내역;
         private System.Windows.Forms.Button btn_미체결;
+        private System.Windows.Forms.Button btn_tmp;
     }
 }
 
