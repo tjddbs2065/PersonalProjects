@@ -64,9 +64,6 @@ namespace KiwoomTrader
         public const int Connected = 1;
         public const int Disconnected = 0;
 
-        public const string scr1 = "2000";
-        public const string scr2 = "2001";
-        public const string scr3 = "2002";
 
         public const string KOSPI = "0";
         public const string KOSDAQ = "10";

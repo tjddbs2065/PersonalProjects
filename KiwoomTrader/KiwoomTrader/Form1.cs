@@ -38,7 +38,6 @@ namespace KiwoomTrader
         private void btn_예수금_Click(object sender, EventArgs e)
         {
             api.예수금상세현황요청();
-
         }
 
         private void btn_계좌평가잔고내역_Click(object sender, EventArgs e)
@@ -53,8 +52,21 @@ namespace KiwoomTrader
 
         private void btn_일봉_Click(object sender, EventArgs e)
         {
-            if(!tb_종목코드.Text.Equals(""))
+            if (!tb_종목코드.Text.Equals(""))
+            {
                 api.주식일봉차트요청(tb_종목코드.Text);
+                tb_종목코드.Clear();
+            }
+        }
+
+        private void btn_종목파일읽기_Click(object sender, EventArgs e)
+        {
+            api.종목파일읽기();
+        }
+
+        private void btn_종목스크린번호할당_Click(object sender, EventArgs e)
+        {
+            api.종목화면번호정리();
         }
     }
 }

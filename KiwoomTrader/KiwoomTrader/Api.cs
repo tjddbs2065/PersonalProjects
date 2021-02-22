@@ -32,6 +32,8 @@ namespace KiwoomTrader
             //사전 초기화
             사전_계좌평가잔고 = new Dictionary<string, Dictionary<string, string>>();
             사전_미체결 = new Dictionary<string, Dictionary<string, string>>();
+            사전_종목스크린번호 = new Dictionary<string, Dictionary<string, string>>();
+            사전_종목파일 = new Dictionary<string, Dictionary<string, string>>();
 
             //배역 초기화
             배열_코스닥 = null;
@@ -39,6 +41,9 @@ namespace KiwoomTrader
 
             //리스트 초기화
             리스트_종목일봉 = new List<List<string>>();
+
+            //개수를 세기 위해 사용, staic 변수 초기화
+            func_count = 0;
 
 
             // 이벤트 등록

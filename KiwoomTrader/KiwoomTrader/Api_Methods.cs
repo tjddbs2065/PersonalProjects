@@ -64,7 +64,7 @@ namespace KiwoomTrader
                 m_axKHOpenAPI.SetInputValue("비밀번호입력매체구분", "00");
                 m_axKHOpenAPI.SetInputValue("조회구분", 조회종류);
                 //예수금상세현황요청
-                m_axKHOpenAPI.CommRqData("정보_예수금상세현황요청", "opw00001", 0, scr1);
+                m_axKHOpenAPI.CommRqData("정보_예수금상세현황요청", "opw00001", 0, 화면번호_잔고조회);
 
                 return Success;
             }
@@ -103,7 +103,7 @@ namespace KiwoomTrader
                 m_axKHOpenAPI.SetInputValue("비밀번호입력매체구분", "00");
                 m_axKHOpenAPI.SetInputValue("조회구분", 조회종류);
 
-                m_axKHOpenAPI.CommRqData("정보_계좌평가잔고내역요청", "opw00018", Int32.Parse(sPrevNext), scr1);
+                m_axKHOpenAPI.CommRqData("정보_계좌평가잔고내역요청", "opw00018", Int32.Parse(sPrevNext), 화면번호_잔고조회);
 
                 return Success;
             }
@@ -119,6 +119,7 @@ namespace KiwoomTrader
         /// </summary>
         private void 계좌평가잔고이벤트(ref AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e)
         {
+            func_count += 1;
             Console.WriteLine("계좌평가잔고 함수 호출");
             //계좌 종합 정보 초기화
             변수_계좌평가잔고_싱글.총매입금액 = Int32.Parse(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "총매입금액"));
@@ -132,16 +133,19 @@ namespace KiwoomTrader
             //행 개수(종목 개수라 봐도 무방)//멀티데이터의 갯수를 반환
             int 종목수 = m_axKHOpenAPI.GetRepeatCnt(e.sTrCode, e.sRQName);
 
+
             //계좌 각 종목 정보 초기화
             for (int i = 0; i < 종목수; i++)
             {
-                string 종목번호 = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "종목번호").Trim().Substring(1);
-                if (!사전_계좌평가잔고.ContainsKey(종목번호))
+                string 종목코드 = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "종목번호").Trim().Substring(1);
+                Console.WriteLine("{0} ({1})", 종목코드, func_count);
+
+                if (!사전_계좌평가잔고.ContainsKey(종목코드))
                 {
                     //계좌평가잔고내역사전.Add(stock_code, new Hashtable());
                     Dictionary<string, string> 임시사전 = new Dictionary<string, string>();
 
-                    임시사전.Add("종목번호", 종목번호);
+                    임시사전.Add("종목번호", 종목코드);
                     임시사전.Add("종목명", m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "종목명").Trim());
                     임시사전.Add("평가손익", m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가손익"));
                     임시사전.Add("수익률(%)", m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "수익률(%)"));
@@ -153,19 +157,19 @@ namespace KiwoomTrader
                     임시사전.Add("평가금액", m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가금액"));
                     임시사전.Add("보유비중", m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "보유비중"));
 
-                    사전_계좌평가잔고.Add(종목번호, 임시사전);
+                    사전_계좌평가잔고.Add(종목코드, 임시사전);
                 }
                 else
                 {
-                    사전_계좌평가잔고[종목번호]["평가손익"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가손익");
-                    사전_계좌평가잔고[종목번호]["수익률(%)"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "수익률(%)");
-                    사전_계좌평가잔고[종목번호]["매입가"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매입가");
-                    사전_계좌평가잔고[종목번호]["보유수량"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "보유수량");
-                    사전_계좌평가잔고[종목번호]["매매가능수량"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매매가능수량");
-                    사전_계좌평가잔고[종목번호]["현재가"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "현재가");
-                    사전_계좌평가잔고[종목번호]["매입금액"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매입금액");
-                    사전_계좌평가잔고[종목번호]["평가금액"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가금액");
-                    사전_계좌평가잔고[종목번호]["보유비중"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "보유비중");
+                    사전_계좌평가잔고[종목코드]["평가손익"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가손익");
+                    사전_계좌평가잔고[종목코드]["수익률(%)"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "수익률(%)");
+                    사전_계좌평가잔고[종목코드]["매입가"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매입가");
+                    사전_계좌평가잔고[종목코드]["보유수량"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "보유수량");
+                    사전_계좌평가잔고[종목코드]["매매가능수량"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매매가능수량");
+                    사전_계좌평가잔고[종목코드]["현재가"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "현재가");
+                    사전_계좌평가잔고[종목코드]["매입금액"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "매입금액");
+                    사전_계좌평가잔고[종목코드]["평가금액"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "평가금액");
+                    사전_계좌평가잔고[종목코드]["보유비중"] = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "보유비중");
                 }
 
             }
@@ -174,6 +178,10 @@ namespace KiwoomTrader
             if (e.sPrevNext == "2")
             {
                 계좌평가잔고요청("2");
+            }
+            else
+            {
+                func_count = 0;
             }
         }
 
@@ -195,7 +203,7 @@ namespace KiwoomTrader
                 m_axKHOpenAPI.SetInputValue("종목코드", "");
                 m_axKHOpenAPI.SetInputValue("체결구분", "1"); //0:전체, 1:미체결, 2:체결
 
-                m_axKHOpenAPI.CommRqData("정보_미체결요청", "opt10075", 0, scr1);
+                m_axKHOpenAPI.CommRqData("정보_미체결요청", "opt10075", 0, 화면번호_주문조회);
                 return Success;
             }
             else
@@ -290,11 +298,11 @@ namespace KiwoomTrader
             Delay(800);
 
             if (date == "") date = DateTime.Now.ToString("yyyyMMdd");
-            m_axKHOpenAPI.SetInputValue("종목코드", stock_code);
+            m_axKHOpenAPI.SetInputValue("종목코드", stock_code.Trim());
             m_axKHOpenAPI.SetInputValue("기준일자", date);
             m_axKHOpenAPI.SetInputValue("수정주가구분", "1");
 
-            m_axKHOpenAPI.CommRqData("정보_주식일봉차트요청", "opt10081", Int32.Parse(sPrevNext), scr2);
+            m_axKHOpenAPI.CommRqData("정보_주식일봉차트요청", "opt10081", Int32.Parse(sPrevNext), 화면번호_일봉조회);
         }
         /// <summary>
         /// 종목 일봉 리스트에 각 일봉의 정보를 초기화 한다.
@@ -302,6 +310,7 @@ namespace KiwoomTrader
         /// <param name="e"></param>
         public void 주식일봉차트이벤트(ref AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e)
         {
+            func_count += 1;
             string 종목코드 = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "종목코드").Trim();
             int 종목일수 = m_axKHOpenAPI.GetRepeatCnt(e.sTrCode, e.sRQName);
 
@@ -320,7 +329,7 @@ namespace KiwoomTrader
 
                 리스트_종목일봉.Add(data);
             }
-            Console.WriteLine("{0} : {1}일", 종목코드, 종목일수);
+            Console.WriteLine("{0} : {1}일 ({2})", 종목코드, 종목일수, func_count);
 
             if(!e.sPrevNext.Equals("2"))
             {
@@ -336,7 +345,7 @@ namespace KiwoomTrader
                     {
                         foreach (List<string> data in 리스트_종목일봉)
                         {
-                            sw.WriteLine("{0};{1};{2};{3}", data[4], data[1], data[2], data[3]);
+                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1]);
                         }
                     }
                 }
@@ -346,10 +355,12 @@ namespace KiwoomTrader
                     {
                         foreach (List<string> data in 리스트_종목일봉)
                         {
-                            sw.WriteLine("{0};\t{1};\t{2};\t{3}", data[4], data[1], data[2], data[3]);
+                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1]);
                         }
                     }
                 }
+
+                func_count = 0;
 
                 //기존 종목의 일봉 정보 제거
                 리스트_종목일봉.Clear();
@@ -361,10 +372,110 @@ namespace KiwoomTrader
             {
                 주식일봉차트요청(stock_code: 종목코드, sPrevNext: e.sPrevNext);
             }
+
+
         }
 
 
         //=========== API 유틸 =================================
+        //함수 다시 호출할 때 사자린 데이터도 맞춰서 연동할 수 있게(가능할까?)
+        //나중에 딕셔너리 최적화 <= 꼭 하자!!
+        public void 종목파일읽기()
+        {
+            string line;
+            using(StreamReader sr = new StreamReader(@".\stock_list.txt"))
+            {
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] tmp_line = line.Split(';');
+                    if (!사전_종목파일.ContainsKey(tmp_line[0]))
+                    {
+                        Dictionary<string, string> 임시사전 = new Dictionary<string, string>();
+                        임시사전.Add("종목명", tmp_line[1]);
+                        임시사전.Add("현재가", tmp_line[2]);
+
+                        사전_종목파일.Add(tmp_line[0], 임시사전);
+                    }
+                    else
+                    {
+                        사전_종목파일[tmp_line[0]]["종목명"] = tmp_line[1];
+                        사전_종목파일[tmp_line[0]]["현재가"] = tmp_line[2];
+                    }
+                }
+            }
+            Console.WriteLine("종목 파일 읽기 완료");
+        }
+        //나중에 딕셔너리 최적화 <= 꼭 하자!!
+        /// <summary>
+        /// 각 사전에 저장되어 있는 종목을 중복을 제외하여 스크린 번호를 부여하고 스크린번호 사전에 보관한다.
+        /// </summary>
+        public void 종목화면번호정리()
+        {
+            //사전_종목스크린번호.Clear();
+
+            Dictionary<string, Dictionary<string, string>> 임시사전 = new Dictionary<string, Dictionary<string, string>>();
+
+            //각 사전에 있는 종목을 불러와 종목의 중복을 제거하고 사전에 추가(이미 종목 코드가 들어있으면 넘기는 방식으로)
+            foreach(string 종목코드 in 사전_계좌평가잔고.Keys)
+            {
+                if (!임시사전.ContainsKey(종목코드))
+                    임시사전.Add(종목코드, null);
+            }
+            foreach(var 주문번호 in 사전_미체결.Keys)
+            {
+                if (!임시사전.ContainsKey(사전_미체결[주문번호]["종목코드"]))
+                    임시사전.Add(사전_미체결[주문번호]["종목코드"], null);
+            }
+            //로드된 종목 검사
+            foreach(var 종목코드 in 사전_종목파일.Keys)
+            {
+                if (!임시사전.ContainsKey(종목코드))
+                    임시사전.Add(종목코드, null);
+            }
+           
+
+            //스크린 번호 할당
+            int count_per_scr= 0;
+            
+            foreach (string 종목코드 in 임시사전.Keys)
+            {
+                int 잔고스크린번호 = int.Parse(화면번호_잔고조회);
+                int 주문스크린번호 = int.Parse(화면번호_주문조회);
+
+                //한 스크린 번호 당 80개의 종목의 정보를 가진다.
+                if (count_per_scr % 80 == 0)
+                {
+                    잔고스크린번호 += 1;
+                    주문스크린번호 += 1;
+                    //기본 화면번호를 변경해준다.
+                    화면번호_잔고조회 = 잔고스크린번호.ToString();
+                    화면번호_주문조회 = 주문스크린번호.ToString();
+                }
+
+                Dictionary<string, string> 스크린번호사전 = new Dictionary<string, string>();
+                스크린번호사전.Add("잔고스크린번호", 잔고스크린번호.ToString());
+                스크린번호사전.Add("주문스크린번호", 주문스크린번호.ToString());
+
+                if (사전_종목스크린번호.ContainsKey(종목코드))
+                {
+                    사전_종목스크린번호[종목코드]["잔고스크린번호"] = 화면번호_잔고조회.ToString();
+                    사전_종목스크린번호[종목코드]["주문스크린번호"] = 화면번호_주문조회.ToString();
+                }
+                else
+                {
+                    사전_종목스크린번호.Add(종목코드, 스크린번호사전);
+                }
+                count_per_scr += 1;
+            }
+            foreach(var scrno in 사전_종목스크린번호)
+            {
+                Console.WriteLine("{0} : {1} : {2}", scrno.Key, scrno.Value["잔고스크린번호"], scrno.Value["주문스크린번호"]);
+            }
+            Console.WriteLine("종목 스크린번호 할당 완료");
+            
+        }
+
+
         /// <summary>
         /// 조회 시 줄 딜레이 함수(3.6초 권장)
         /// </summary>
