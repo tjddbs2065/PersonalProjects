@@ -433,9 +433,9 @@ namespace KiwoomTrader
                 data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "거래량").Trim());
                 data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "거래대금").Trim());
                 data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "체결시간").Trim());
-                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "시가").Trim());
-                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "고가").Trim());
-                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "저가").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "시가").Trim().Replace("+", "").Replace("-", ""));
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "고가").Trim().Replace("+", "").Replace("-", ""));
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "저가").Trim().Replace("+", "").Replace("-", ""));
                 data.Add("");
 
                 리스트_종목분봉.Add(data);

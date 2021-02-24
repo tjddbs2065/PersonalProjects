@@ -94,7 +94,11 @@ namespace KiwoomTrader
                 for (int idx = 510; idx < 900; idx++)
                 {
                     Console.WriteLine(분봉리스트[idx][4]);
-                    cht_분봉.Series[0].Points.Add(Int32.Parse(분봉리스트[idx][1])); //현재가 출력
+                    cht_분봉.Series[0].Points.AddXY(분봉리스트[idx][4], Int32.Parse(분봉리스트[idx][6])); //고가 출력
+                    cht_분봉.Series[0].Points[idx - 510].YValues[1] = (Int32.Parse(분봉리스트[idx][7])); //저가 출력
+                    cht_분봉.Series[0].Points[idx - 510].YValues[2] = (Int32.Parse(분봉리스트[idx][5])); //시가 출력
+                    cht_분봉.Series[0].Points[idx - 510].YValues[3] = (Int32.Parse(분봉리스트[idx][1])); //현재가 출력
+
 
                     bool pass_success = true;
                     if (분봉리스트 == null || 분봉리스트.Count < 120)
@@ -121,6 +125,21 @@ namespace KiwoomTrader
 
                     }
                 }
+
+                double yMinValue = double.MaxValue;
+                double yMaxValue = double.MinValue;
+                for (int i = 0; i < cht_분봉.Series[0].Points.Count; i++)
+                {
+                    Series s = cht_분봉.Series[0];
+                    if (i < s.Points.Count)
+                    {
+                        yMaxValue = Math.Max(yMaxValue, s.Points[i].YValues[0]);
+                        yMinValue = Math.Min(yMinValue, s.Points[i].YValues[1]);
+                    }
+                }
+                cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + (yMaxValue * 0.1);
+                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - (yMaxValue * 0.1);
+
                 분봉리스트.Clear();
             }
         }
@@ -132,7 +151,7 @@ namespace KiwoomTrader
                 int start_position = (int)e.Axis.ScaleView.ViewMinimum;
                 int end_position = (int)e.Axis.ScaleView.ViewMaximum;
 
-                //double yMinValue = double.MaxValue;
+                double yMinValue = double.MaxValue;
                 double yMaxValue = double.MinValue;
 
                 for (int i = start_position; i < end_position; i++)
@@ -142,12 +161,12 @@ namespace KiwoomTrader
                     if (i < s.Points.Count)
                     {
                         yMaxValue = Math.Max(yMaxValue, s.Points[i].YValues[0]);
-                        //yMinValue = Math.Min(yMinValue, s.Points[i].YValues[1]);
+                        yMinValue = Math.Min(yMinValue, s.Points[i].YValues[1]);
                     }
                 }
                 
                 cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + (yMaxValue*0.2);
-                cht_분봉.ChartAreas[0].AxisY.Minimum = yMaxValue - (yMaxValue * 0.2);
+                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - (yMaxValue * 0.2);
             }
         }
     }

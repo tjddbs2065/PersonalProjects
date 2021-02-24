@@ -145,6 +145,7 @@
             chartArea1.AxisY2.InterlacedColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             chartArea1.AxisY2.LineColor = System.Drawing.Color.Silver;
             chartArea1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea1.CursorX.IsUserSelectionEnabled = true;
             chartArea1.Name = "ChartArea1";
             this.cht_분봉.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
@@ -152,8 +153,9 @@
             this.cht_분봉.Location = new System.Drawing.Point(93, 138);
             this.cht_분봉.Name = "cht_분봉";
             series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series1.Color = System.Drawing.Color.Red;
+            series1.CustomProperties = "PriceDownColor=Blue, PriceUpColor=Red";
             series1.Legend = "Legend1";
             series1.Name = "현재가";
             series1.YValuesPerPoint = 4;
