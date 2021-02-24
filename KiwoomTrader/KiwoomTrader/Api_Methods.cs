@@ -302,7 +302,7 @@ namespace KiwoomTrader
             m_axKHOpenAPI.SetInputValue("기준일자", date);
             m_axKHOpenAPI.SetInputValue("수정주가구분", "1");
 
-            m_axKHOpenAPI.CommRqData("정보_주식일봉차트요청", "opt10081", Int32.Parse(sPrevNext), 화면번호_일봉조회);
+            m_axKHOpenAPI.CommRqData("정보_주식일봉차트요청", "opt10081", Int32.Parse(sPrevNext), 화면번호_차트조회);
         }
         /// <summary>
         /// 종목 일봉 리스트에 각 일봉의 정보를 초기화 한다.
@@ -377,7 +377,114 @@ namespace KiwoomTrader
         }
 
 
+        //=========== 실시간 종목 조회 =========================
+        /// <summary>
+        /// 실시간으로 받을 데이터 목록을 등록
+        /// </summary>
+        public void 실시간요청등록()
+        {
+            Console.WriteLine("실시간 요청 함수 호출");
+            m_axKHOpenAPI.SetRealReg(화면번호_실시간조회, "", RealType.REALTYPE.장시작시간.장운영구분.ToString(), "0");
+
+            Console.WriteLine(RealType.REALTYPE.주식체결.체결시간);
+            m_axKHOpenAPI.SetRealReg(화면번호_실시간조회, "096040", RealType.REALTYPE.주식체결.체결시간.ToString(), "1");
+
+
+        }
+
+        //=========== 차트 분석 ===============================
+        public void 주식분봉차트요청(string stock_code, string tick = "1", string sPrevNext = "0")
+        {
+            if (m_axKHOpenAPI.GetMasterCodeName(stock_code).Equals(""))
+            {
+                Console.WriteLine("잘못된 종목 코드입니다. 다시 입력해 주세요.");
+                return;
+            }
+
+            Console.WriteLine("분봉차트 요청 함수 호출");
+
+            //Delay(3600);
+            //Delay(800);
+
+            m_axKHOpenAPI.SetInputValue("종목코드", stock_code.Trim());
+            m_axKHOpenAPI.SetInputValue("틱범위", "1");
+            m_axKHOpenAPI.SetInputValue("수정주가구분", "1");
+
+            m_axKHOpenAPI.CommRqData("정보_주식분봉차트요청", "opt10080", Int32.Parse(sPrevNext), 화면번호_차트조회);
+
+            //차단기의 상태를 확인해 통과시킬지 여부를 결정한다.
+            autoEvent.Reset();
+            autoEvent.WaitOne();
+        }
+        public void 주식분봉차트이벤트(ref AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e) //최대 900개 조회
+        {
+            //기존 종목의 일봉 정보 제거
+            리스트_종목분봉.Clear();
+
+            func_count += 1;
+            string 종목코드 = m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "종목코드").Trim();
+            int 종목분봉수 = m_axKHOpenAPI.GetRepeatCnt(e.sTrCode, e.sRQName);
+
+            for (int i = 0; i < 종목분봉수; i++)
+            {
+                List<string> data = new List<string>();
+                data.Add("");
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "현재가").Trim().Replace("+","").Replace("-",""));
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "거래량").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "거래대금").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "체결시간").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "시가").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "고가").Trim());
+                data.Add(m_axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, i, "저가").Trim());
+                data.Add("");
+
+                리스트_종목분봉.Add(data);
+            }
+            Console.WriteLine("{0} : {1}일 ({2})", 종목코드, 종목분봉수, func_count);
+
+                //임시로 일봉 받아온 종목들의 정보를 파일로 저장
+                string 종목이름 = m_axKHOpenAPI.GetMasterCodeName(종목코드);
+                string path = @".\";
+                path += 종목이름 + ".txt";
+
+                if (!File.Exists(path))
+                {
+                    File.Create(path).Dispose();
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        foreach (List<string> data in 리스트_종목분봉)
+                        {
+                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1].Substring(1));
+                        }
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        foreach (List<string> data in 리스트_종목분봉)
+                        {
+                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1]);
+                        }
+                    }
+                }
+                func_count = 0;
+
+                Console.WriteLine("분봉 데이터 저장 완료");
+            
+
+            autoEvent.Set();
+        }
+
+
+
         //=========== API 유틸 =================================
+        //
+        public List<List<string>> Get_종목분봉()
+        {
+            return 리스트_종목분봉;
+        }
+
         //함수 다시 호출할 때 사자린 데이터도 맞춰서 연동할 수 있게(가능할까?)
         //나중에 딕셔너리 최적화 <= 꼭 하자!!
         public void 종목파일읽기()
@@ -476,6 +583,8 @@ namespace KiwoomTrader
         }
 
 
+
+
         /// <summary>
         /// 조회 시 줄 딜레이 함수(3.6초 권장)
         /// </summary>
@@ -491,6 +600,7 @@ namespace KiwoomTrader
                 ThisMoment = DateTime.Now;
             }
         }
+        
 
         //public void Calc()
         //{

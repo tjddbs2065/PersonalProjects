@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,7 @@
     <Compile Include="Api_Vars.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="RealType.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -50,7 +50,8 @@ namespace KiwoomTrader
         /// 스레드 동기화를 위해 사용할 스레드 제어
         /// </summary>
         //true일 경우 차단기가 올라갔다고 생각
-        private static AutoResetEvent autoEvent = new AutoResetEvent(true);
+        public static AutoResetEvent autoEvent = new AutoResetEvent(true);
+        public static AutoResetEvent chartEvent = new AutoResetEvent(true);
         //static AutoResetEvent calcEvent = new AutoResetEvent(true);
         //static AutoResetEvent funcEvent = new AutoResetEvent(true);
 
@@ -58,7 +59,13 @@ namespace KiwoomTrader
         private string 화면번호_잔고조회 = "2000";
         private string 화면번호_주문조회 = "3000";
 
-        private string 화면번호_일봉조회 = "4000";
+        private string 화면번호_차트조회 = "4000";
         private string 화면번호_실시간조회 = "5000";
+
+
+
+
+        //차트 분석용 
+        List<List<string>> 리스트_종목분봉;
     }
 }

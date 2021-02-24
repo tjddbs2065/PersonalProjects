@@ -42,6 +42,8 @@ namespace KiwoomTrader
             //리스트 초기화
             리스트_종목일봉 = new List<List<string>>();
 
+            리스트_종목분봉 = new List<List<string>>();
+
             //개수를 세기 위해 사용, staic 변수 초기화
             func_count = 0;
 
@@ -49,6 +51,7 @@ namespace KiwoomTrader
             // 이벤트 등록
             m_axKHOpenAPI.OnEventConnect += onEventConnect;
             m_axKHOpenAPI.OnReceiveTrData += onReceiveTrData;
+            m_axKHOpenAPI.OnReceiveRealData += onReceiveRealData;
 
             시장종목초기화();
         }

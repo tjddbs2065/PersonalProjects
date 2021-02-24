@@ -70,9 +70,42 @@ namespace KiwoomTrader
             {
                 주식일봉차트이벤트(ref e);
             }
-
+            else if (e.sRQName.Equals("정보_주식분봉차트요청"))
+            {
+                주식분봉차트이벤트(ref e);
+            }
 
         }
 
+        /// <summary>
+        /// 실시간 요청을 하면 실시간 데이터를 받을 때마다 호출되는 이벤트
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onReceiveRealData(object sender, AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveRealDataEvent e)
+        {
+            Console.WriteLine(e.sRealType);
+            if (e.sRealType == "장시작시간")
+            {
+                int fid = RealType.REALTYPE.장시작시간.장운영구분;
+                string value = m_axKHOpenAPI.GetCommRealData(e.sRealKey, fid);
+                if (value == "0")
+                    Console.WriteLine("장 시작 전");
+                else if (value == "3")
+                    Console.WriteLine("장 시작");
+                else if (value == "2")
+                    Console.WriteLine("장 종료, 동시호가로 넘어감");
+                else if (value == "4")
+                    Console.WriteLine("3시30분 장 종료");
+            }
+            else if(e.sRealType == "주식체결")
+            {
+                Console.WriteLine(m_axKHOpenAPI.GetCommRealData(e.sRealKey, RealType.REALTYPE.주식체결.현재가));
+                Console.WriteLine(m_axKHOpenAPI.GetCommRealData(e.sRealKey, RealType.REALTYPE.주식체결.등락율));
+                Console.WriteLine(m_axKHOpenAPI.GetCommRealData(e.sRealKey, RealType.REALTYPE.주식체결.거래량));
+                Console.WriteLine(m_axKHOpenAPI.GetCommRealData(e.sRealKey, RealType.REALTYPE.주식체결.체결시간));
+
+            }
+        }
     }
 }
