@@ -162,5 +162,10 @@ namespace KiwoomTrader
                 cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - 10;
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
     }
 }
