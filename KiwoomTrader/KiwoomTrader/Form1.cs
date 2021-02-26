@@ -80,7 +80,8 @@ namespace KiwoomTrader
         {
             if (!tb_종목코드.Text.Equals(""))
             {
-                api.주식분봉차트요청(tb_종목코드.Text);
+                api.주식분봉차트요청(tb_종목코드.Text, "3");
+
                 tb_종목코드.Clear();
 
                 foreach(var i in cht_분봉.Series)
@@ -91,23 +92,24 @@ namespace KiwoomTrader
                 List<List<string>> 분봉리스트 = api.Get_종목분봉();
                 분봉리스트.Reverse();
 
-                for (int idx = 510; idx < 900; idx++)
+                double yMinValue = double.MaxValue;
+                double yMaxValue = double.MinValue;
+                for (int idx = 510; idx < 분봉리스트.Count; idx++)
                 {
-                    Console.WriteLine(분봉리스트[idx][4]);
-                    cht_분봉.Series[0].Points.AddXY(분봉리스트[idx][4], Int32.Parse(분봉리스트[idx][6])); //고가 출력
+
+                    cht_분봉.Series[0].Points.AddXY(분봉리스트[idx][4].Substring(8, 4), Int32.Parse(분봉리스트[idx][6])); //고가 출력
                     cht_분봉.Series[0].Points[idx - 510].YValues[1] = (Int32.Parse(분봉리스트[idx][7])); //저가 출력
                     cht_분봉.Series[0].Points[idx - 510].YValues[2] = (Int32.Parse(분봉리스트[idx][5])); //시가 출력
                     cht_분봉.Series[0].Points[idx - 510].YValues[3] = (Int32.Parse(분봉리스트[idx][1])); //현재가 출력
 
-
-                    bool pass_success = true;
-                    if (분봉리스트 == null || 분봉리스트.Count < 120)
+                    Console.WriteLine(idx);
+                    if (idx - 510 < cht_분봉.Series[0].Points.Count)
                     {
-                        pass_success = false;
+                        yMaxValue = Math.Max(yMaxValue, cht_분봉.Series[0].Points[idx-510].YValues[0]);
+                        yMinValue = Math.Min(yMinValue, cht_분봉.Series[0].Points[idx-510].YValues[1]);
                     }
-                    else // 120일 이상 되면
-                    {
-                        int total_price = 0;
+
+                    int total_price = 0;
                         for (int i = idx - 60; i < idx; i++)
                         {
                             total_price += Int32.Parse(분봉리스트[i][1]); // 현재가 합
@@ -123,22 +125,13 @@ namespace KiwoomTrader
                         int 이평선120 = total_price / 120; // 오늘자 120일 이평선
                         cht_분봉.Series[2].Points.Add(이평선120);
 
-                    }
-                }
 
-                double yMinValue = double.MaxValue;
-                double yMaxValue = double.MinValue;
-                for (int i = 0; i < cht_분봉.Series[0].Points.Count; i++)
-                {
-                    Series s = cht_분봉.Series[0];
-                    if (i < s.Points.Count)
-                    {
-                        yMaxValue = Math.Max(yMaxValue, s.Points[i].YValues[0]);
-                        yMinValue = Math.Min(yMinValue, s.Points[i].YValues[1]);
-                    }
                 }
-                cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + (yMaxValue * 0.1);
-                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - (yMaxValue * 0.1);
+                Console.WriteLine(yMaxValue);
+                Console.WriteLine(yMinValue);
+
+                cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + 10;
+                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - 10;
 
                 분봉리스트.Clear();
             }
@@ -165,8 +158,8 @@ namespace KiwoomTrader
                     }
                 }
                 
-                cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + (yMaxValue*0.2);
-                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - (yMaxValue * 0.2);
+                cht_분봉.ChartAreas[0].AxisY.Maximum = yMaxValue + 10;
+                cht_분봉.ChartAreas[0].AxisY.Minimum = yMinValue - 10;
             }
         }
     }

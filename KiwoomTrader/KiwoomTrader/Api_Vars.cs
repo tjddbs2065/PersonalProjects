@@ -39,6 +39,8 @@ namespace KiwoomTrader
         /// 한 종목의 정보를 담기 위한 리스트이다. <= 딕셔너리로 바꿀까?
         /// </summary>
         List<List<string>> 리스트_종목일봉;
+        //차트 분석용 
+        List<List<string>> 리스트_종목분봉;
 
         /// <summary>
         /// 함수의 호출 횟수를 구분하기 위한 변수이다.
@@ -65,7 +67,5 @@ namespace KiwoomTrader
 
 
 
-        //차트 분석용 
-        List<List<string>> 리스트_종목분봉;
     }
 }

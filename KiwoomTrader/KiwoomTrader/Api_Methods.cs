@@ -393,6 +393,12 @@ namespace KiwoomTrader
         }
 
         //=========== 차트 분석 ===============================
+        /// <summary>
+        /// 입력된 종목의 분봉 정보를 요청한다.
+        /// </summary>
+        /// <param name="stock_code"></param>
+        /// <param name="tick"></param>
+        /// <param name="sPrevNext"></param>
         public void 주식분봉차트요청(string stock_code, string tick = "1", string sPrevNext = "0")
         {
             if (m_axKHOpenAPI.GetMasterCodeName(stock_code).Equals(""))
@@ -407,7 +413,7 @@ namespace KiwoomTrader
             //Delay(800);
 
             m_axKHOpenAPI.SetInputValue("종목코드", stock_code.Trim());
-            m_axKHOpenAPI.SetInputValue("틱범위", "1");
+            m_axKHOpenAPI.SetInputValue("틱범위", tick);
             m_axKHOpenAPI.SetInputValue("수정주가구분", "1");
 
             m_axKHOpenAPI.CommRqData("정보_주식분봉차트요청", "opt10080", Int32.Parse(sPrevNext), 화면번호_차트조회);
@@ -416,6 +422,10 @@ namespace KiwoomTrader
             autoEvent.Reset();
             autoEvent.WaitOne();
         }
+        /// <summary>
+        /// 종목 분봉 리스트에 각 분봉의 정보를 초기화 한다.
+        /// </summary>
+        /// <param name="e"></param>
         public void 주식분봉차트이벤트(ref AxKHOpenAPILib._DKHOpenAPIEvents_OnReceiveTrDataEvent e) //최대 900개 조회
         {
             //기존 종목의 일봉 정보 제거
@@ -454,7 +464,7 @@ namespace KiwoomTrader
                     {
                         foreach (List<string> data in 리스트_종목분봉)
                         {
-                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1].Substring(1));
+                            sw.WriteLine("{0};{1};{2}", data[4], 종목코드, data[1]);
                         }
                     }
                 }
